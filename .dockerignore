@@ -1,0 +1,29 @@
+# Ignore version control folders
+.git/
+.gitignore
+
+# Ignore build output folders
+bin/
+obj/
+
+# Ignore user/editor-specific files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Ignore logs and temp files
+*.log
+*.tmp
+*.temp
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore secrets and environment files
+.env
+.env.local
+.env.*.local

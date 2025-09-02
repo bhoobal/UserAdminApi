@@ -1,0 +1,32 @@
+namespace: useradmin-helmchart
+
+image:
+  repository: bhoobal/useradminapi
+  tag: "2.0"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  type: NodePort
+  port: 8080
+  nodePort: 30090
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "500m"
+  limits:
+    memory: "500Mi"
+    cpu: "500m"
+
+config:
+  STORAGE_PROVIDER: "json"
+  FeatureManagement__EncryptUserData: "true"
+  ASPNETCORE_URLS: "http://+:8080"
+
+nodeAffinity:
+  key: apptenant
+  operator: In
+  values:
+    - useradmin

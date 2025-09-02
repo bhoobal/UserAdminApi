@@ -1,0 +1,83 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: useradmin
+  labels:
+    name: useradminapi
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: useradmin-config
+  namespace: useradmin
+  labels:
+    app: useradminapi
+data:
+  STORAGE_PROVIDER: "json"
+  FeatureManagement__EncryptUserData: "true"
+  ASPNETCORE_URLS: "http://+:8080"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: useradminapi
+  namespace: useradmin
+  labels:
+    app: useradminapi
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: useradminapi
+  template:
+    metadata:
+      labels:
+        app: useradminapi
+    spec:
+      containers:
+        - name: useradminapi
+          image: bhoobal/useradminapi:1.0   # <-- use the local image
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: useradmin-config
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "500m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: "apptenant"
+                    operator: In
+                    values:
+                      - useradmin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: useradminapi
+  namespace: useradmin
+  labels:
+    app: useradminapi
+spec:
+  selector:
+    app: useradminapi
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 30080
+    name: http
+  type: NodePort

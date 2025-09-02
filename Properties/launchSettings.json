@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "UserAdminApi": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5199",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "STORAGE_PROVIDER": "json"
+      }
+    }
+  }
+}
